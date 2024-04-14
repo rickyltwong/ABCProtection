@@ -88,7 +88,7 @@ public class UserDAO {
 
 	public List<User> getAllUsers() {
 		List<User> users = new ArrayList<>();
-		String sql = "SELECT * FROM Users";
+		String sql = "SELECT * FROM Users where role != 'admin'";
 		try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 			while (rs.next()) {
 				User user = new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"),
