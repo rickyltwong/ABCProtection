@@ -8,18 +8,18 @@ import java.util.Date;
  */
 public class Registration {
 	private int registrationId;
-	private int userId;
-	private int productId;
+	private String username;
+	private String productName;
 	private String serialNo;
 	private Date purchaseDate;
 
 	public Registration() {
 	}
 
-	public Registration(int registrationId, int userId, int productId, String serialNo, Date purchaseDate) {
+	public Registration(int registrationId, String username, String productName, String serialNo, Date purchaseDate) {
 		this.registrationId = registrationId;
-		this.userId = userId;
-		this.productId = productId;
+		this.username = username;
+		this.productName = productName;
 		this.serialNo = serialNo;
 		this.purchaseDate = purchaseDate;
 	}
@@ -32,20 +32,20 @@ public class Registration {
 		this.registrationId = registrationId;
 	}
 
-	public int getUserId() {
-		return userId;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
-	public int getProductId() {
-		return productId;
+	public String getProductName() {
+		return productName;
 	}
 
-	public void setProductId(int productId) {
-		this.productId = productId;
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 
 	public String getSerialNo() {

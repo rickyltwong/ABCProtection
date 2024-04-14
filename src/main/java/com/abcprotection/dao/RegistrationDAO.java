@@ -14,20 +14,20 @@ import com.abcprotection.util.DBConnectionUtil;
 /**
  * DAO class for handling database operations related to registrations.
  */
-public class RegistrationsDAO {
+public class RegistrationDAO {
 
 	private Connection conn;
 
-	public RegistrationsDAO() {
+	public RegistrationDAO() {
 		conn = DBConnectionUtil.getConnection();
 	}
 
 	public boolean addRegistration(Registration registration) {
-		String sql = "INSERT INTO Registrations (user_id, product_id, serial_no, purchase_date) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO Registrations (username, product_name, serial_no, purchase_date) VALUES (?, ?, ?, ?)";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, registration.getUserId());
-			pstmt.setInt(2, registration.getProductId());
+			pstmt.setString(1, registration.getUsername());
+			pstmt.setString(2, registration.getProductName());
 			pstmt.setString(3, registration.getSerialNo());
 			pstmt.setDate(4, new java.sql.Date(registration.getPurchaseDate().getTime()));
 			pstmt.executeUpdate();
@@ -45,8 +45,8 @@ public class RegistrationsDAO {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				Registration registration = new Registration(rs.getInt("registration_id"), rs.getInt("user_id"),
-						rs.getInt("product_id"), rs.getString("serial_no"), rs.getDate("purchase_date"));
+				Registration registration = new Registration(rs.getInt("registration_id"), rs.getString("username"),
+						rs.getString("product_name"), rs.getString("serial_no"), rs.getDate("purchase_date"));
 				registrations.add(registration);
 			}
 		} catch (SQLException e) {
@@ -59,8 +59,8 @@ public class RegistrationsDAO {
 		String sql = "UPDATE Registrations SET user_id = ?, product_id = ?, serial_no = ?, purchase_date = ? WHERE registration_id = ?";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, registration.getUserId());
-			pstmt.setInt(2, registration.getProductId());
+			pstmt.setString(1, registration.getUsername());
+			pstmt.setString(2, registration.getProductName());
 			pstmt.setString(3, registration.getSerialNo());
 			pstmt.setDate(4, new java.sql.Date(registration.getPurchaseDate().getTime()));
 			pstmt.setInt(5, registration.getRegistrationId());
@@ -83,5 +83,22 @@ public class RegistrationsDAO {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	public List<Registration> getAllRegistrationsUser(String username) {
+		List<Registration> registrations = new ArrayList<>();
+		String sql = "SELECT * FROM Registrations WHERE username = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setString(1, username);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Registration registration = new Registration(rs.getInt("registration_id"), rs.getString("username"),
+						rs.getString("product_name"), rs.getString("serial_no"), rs.getDate("purchase_date"));
+				registrations.add(registration);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return registrations;
 	}
 }
