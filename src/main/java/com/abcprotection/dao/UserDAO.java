@@ -57,15 +57,15 @@ public class UserDAO {
 	}
 
 	public boolean updateUser(User user) {
-		String sql = "UPDATE Users SET username = ?, password = ?, cellphone_no = ?, email = ?, name = ?, address = ? WHERE user_id = ?";
+		String sql = "UPDATE Users SET username = ?, cellphone_no = ?, email = ?, name = ?, address = ? WHERE user_id = ?";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, user.getUsername());
-			pstmt.setString(2, user.getPassword());
-			pstmt.setString(3, user.getCellphoneNo());
-			pstmt.setString(4, user.getEmail());
-			pstmt.setString(5, user.getName());
-			pstmt.setString(6, user.getAddress());
-			pstmt.setInt(7, user.getUserId());
+//			pstmt.setString(2, user.getPassword());
+			pstmt.setString(2, user.getCellphoneNo());
+			pstmt.setString(3, user.getEmail());
+			pstmt.setString(4, user.getName());
+			pstmt.setString(5, user.getAddress());
+			pstmt.setInt(6, user.getUserId());
 			pstmt.executeUpdate();
 			return true;
 		} catch (SQLException e) {
