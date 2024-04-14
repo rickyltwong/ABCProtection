@@ -34,7 +34,7 @@
             <div class="list-group">
                 <a href="${pageContext.request.contextPath}/admin/dashboard?section=users" class="list-group-item list-group-item-action">Manage Users</a>
 				<a href="${pageContext.request.contextPath}/admin/dashboard?section=products" class="list-group-item list-group-item-action">Manage Products</a>
-				<a href="${pageContext.request.contextPath}/admin/dashboard?section=claims" class="list-group-item list-group-item-action">Review Claims</a>
+				<a href="${pageContext.request.contextPath}/admin/dashboard?section=claims" class="list-group-item list-group-item-action">Manage Claims</a>
 				<a href="${pageContext.request.contextPath}/admin/dashboard?section=reports" class="list-group-item list-group-item-action">Generate Reports</a>
 
             </div>
