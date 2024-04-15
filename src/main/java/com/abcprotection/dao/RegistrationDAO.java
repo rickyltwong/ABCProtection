@@ -37,6 +37,7 @@ public class RegistrationDAO {
 			return false;
 		}
 	}
+	
 
 	public List<Registration> getAllRegistrations() {
 		List<Registration> registrations = new ArrayList<>();
@@ -45,8 +46,7 @@ public class RegistrationDAO {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				Registration registration = new Registration(rs.getInt("registration_id"), rs.getString("username"),
-						rs.getString("product_name"), rs.getString("serial_no"), rs.getDate("purchase_date"));
+				Registration registration = new Registration(rs.getInt(1),rs.getString(2), rs.getString(3), rs.getString(4), rs.getDate(5));
 				registrations.add(registration);
 			}
 		} catch (SQLException e) {
@@ -84,6 +84,7 @@ public class RegistrationDAO {
 			return false;
 		}
 	}
+	
 
 	public List<Registration> getAllRegistrationsUser(String username) {
 		List<Registration> registrations = new ArrayList<>();
@@ -92,8 +93,7 @@ public class RegistrationDAO {
 			pstmt.setString(1, username);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				Registration registration = new Registration(rs.getInt("registration_id"), rs.getString("username"),
-						rs.getString("product_name"), rs.getString("serial_no"), rs.getDate("purchase_date"));
+				Registration registration = new Registration(rs.getInt(1),rs.getString(2), rs.getString(3), rs.getString(4), rs.getDate(5));
 				registrations.add(registration);
 			}
 		} catch (SQLException e) {
