@@ -11,7 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.abcprotection.dao.ClaimDAO;
+import com.abcprotection.dao.ProductDAO;
 import com.abcprotection.dao.UserDAO;
+import com.abcprotection.model.Claim;
+import com.abcprotection.model.Product;
 import com.abcprotection.model.User;
 
 /**
@@ -22,9 +26,13 @@ public class AdminDashboardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private UserDAO userDAO;
+	private ProductDAO productDAO;
+	private ClaimDAO claimDAO;
 	// Initialization of DAO
     public void init() {
         userDAO = new UserDAO(); 
+        productDAO = new ProductDAO();
+        claimDAO = new ClaimDAO();
     }
 
        
@@ -45,12 +53,13 @@ public class AdminDashboardServlet extends HttpServlet {
         if (session != null && session.getAttribute("admin") != null) {
             // Session exists and user has been authenticated as admin
         	String section = request.getParameter("section");
-        	String searchquery = request.getParameter("searchQuery");
+        	
         	
         	if ("users".equals(section)) {
+        		String searchUser = request.getParameter("searchUser");
         		List<User> users = new ArrayList<>();
-                if (searchquery != null && !searchquery.isBlank()) {
-                    User user = userDAO.getUserById(Integer.parseInt(searchquery));  
+                if (searchUser != null && !searchUser.isBlank()) {
+                    User user = userDAO.getUserById(Integer.parseInt(searchUser));  
                     if (user != null) {
                     	users.add(user);
                     } 
@@ -62,7 +71,40 @@ public class AdminDashboardServlet extends HttpServlet {
                 if (users.isEmpty()) {
                 	request.setAttribute("errorMessage", "User not found!");
                 }
-            }
+            } else if ("products".equals(section)) {
+            	String searchProduct = request.getParameter("searchProduct");
+            	List<Product> products = new ArrayList<>();
+            	if (searchProduct != null && !searchProduct.isBlank()) {
+                    Product product = productDAO.getProductByName(searchProduct);
+                    if (product != null) {
+                    	products.add(product);
+                    } 
+                } else {
+                	products = productDAO.getAllProducts();
+                	
+                }
+                request.setAttribute("products", products);
+                if (products.isEmpty()) {
+                	request.setAttribute("errorMessage", "Product not found!");
+                }
+            } else if ("claims".equals(section)) {
+            	String claimStatus = request.getParameter("status");
+            	List<Claim> claims = new ArrayList<>();
+            	if (claimStatus != null && !claimStatus.isBlank()) {
+                    claims = claimDAO.getClaimByStatus(claimStatus);
+//                    if (claim != null) {
+//                    	claims.add(claim);
+//                    } 
+                } else {
+                	claims = claimDAO.getAllClaims();
+                	
+                }
+                request.setAttribute("claims", claims);
+                if (claims.isEmpty()) {
+                	request.setAttribute("errorMessage", "Claim not found!");
+                }
+            	
+            } 
         	request.setAttribute("section", section);
             request.getRequestDispatcher("/WEB-INF/views/admin/adminDashboard.jsp").forward(request, response);
         } else {
