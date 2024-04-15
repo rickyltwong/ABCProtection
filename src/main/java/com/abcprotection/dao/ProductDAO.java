@@ -50,6 +50,20 @@ public class ProductDAO {
 		}
 		return product;
 	}
+	public Product getProductByName(String productName) {
+		String sql = "SELECT * FROM Products WHERE product_name = ?";
+		Product product = null;
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setString(1, productName);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				product = new Product(rs.getInt("product_id"), rs.getString("product_name"), rs.getString("model"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return product;
+	}
 
 	public boolean updateProduct(Product product) {
 		String sql = "UPDATE Products SET product_name = ?, model = ? WHERE product_id = ?";

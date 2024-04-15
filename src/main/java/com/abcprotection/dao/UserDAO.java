@@ -23,7 +23,7 @@ public class UserDAO {
 	}
 
 	public boolean addUser(User user) {
-		String sql = "INSERT INTO Users (username, password, cellphone_no, email, name, address, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO Users (username, password, cellphone_no, email, name, address) VALUES (?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, user.getUsername());
 			pstmt.setString(2, user.getPassword());
@@ -31,7 +31,6 @@ public class UserDAO {
 			pstmt.setString(4, user.getEmail());
 			pstmt.setString(5, user.getName());
 			pstmt.setString(6, user.getAddress());
-			pstmt.setString(7, "user");
 			pstmt.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -102,22 +101,4 @@ public class UserDAO {
 		}
 		return users;
 	}
-
-	public User authenticateUser(String username, String password) {
-		String sql = "SELECT * FROM Users WHERE username = ? AND password = ?";
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setString(1, username);
-			pstmt.setString(2, password);
-			ResultSet rs = pstmt.executeQuery();
-			if (rs.next()) {
-				return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"),
-						rs.getString("cellphone_no"), rs.getString("email"), rs.getString("name"),
-						rs.getString("address"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 }

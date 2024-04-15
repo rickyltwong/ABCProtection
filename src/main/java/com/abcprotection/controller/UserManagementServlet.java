@@ -13,7 +13,7 @@ import com.abcprotection.model.User;
 /**
  * Servlet implementation class UserManagementServlet
  */
-@WebServlet("/admin/edit")
+@WebServlet("/admin/users")
 public class UserManagementServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -68,12 +68,10 @@ public class UserManagementServlet extends HttpServlet {
         User user = new User(userId, username, cellphoneNo, email, name, address);
 
         boolean success = userDAO.updateUser(user);
-        if (success) {
-            response.sendRedirect(request.getContextPath() + "/admin/dashboard?section=users");
-        } else {
-            // Optionally handle different redirection or error messaging
-            response.sendRedirect(request.getContextPath() + "/admin/dashboard?error=Unable to update user");
-        }
+        if (!success) {
+        	request.setAttribute("errorMessage", "Failed to update.");
+        } 
+        response.sendRedirect(request.getContextPath() + "/admin/dashboard?section=users");
     
 	}
 
@@ -84,12 +82,10 @@ public class UserManagementServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		int userId = Integer.parseInt(request.getParameter("userId"));
 		boolean success = userDAO.deleteUser(userId);
-		if (success) {
-            response.sendRedirect(request.getContextPath() + "/admin/dashboard?section=users");
-        } else {
-            // Optionally handle different redirection or error messaging
-            response.sendRedirect(request.getContextPath() + "/admin/dashboard?error=Unable to update user");
-        }
+		if (!success) {
+			request.setAttribute("errorMessage", "Failed to update.");
+        } 
+		response.sendRedirect(request.getContextPath() + "/admin/dashboard?section=users");
 	}
 
 }

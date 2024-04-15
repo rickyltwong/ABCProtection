@@ -10,11 +10,11 @@
 <div class="container">
     <h2>User Management</h2>
     <form action="${pageContext.request.contextPath}/admin/dashboard?section=users" method="post" class="form-inline">
-    <div class="form-group mb-2">
-        <input type="text" name="searchQuery" class="form-control" placeholder="Search user by ID">
-    </div>
-    <button type="submit" class="btn btn-primary mb-2">Search</button>
-</form>
+	    <div class="form-group mb-2">
+	        <input type="text" name="searchUser" class="form-control" placeholder="Search user by ID">
+	    </div>
+	    <button type="submit" class="btn btn-primary mb-2">Search</button>
+	</form>
     
     <table class="table table-bordered table-striped">
         <thead>
@@ -53,10 +53,10 @@
         </tbody>
     </table>
     <c:if test="${not empty errorMessage}">
-    <div class="alert alert-danger" role="alert">
-        ${errorMessage}
-    </div>
-</c:if>
+	    <div class="alert alert-danger" role="alert">
+	        ${errorMessage}
+	    </div>
+	</c:if>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
@@ -76,7 +76,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <form action="${pageContext.request.contextPath}/admin/edit" method="post" style="display: inline;">
+                <form action="${pageContext.request.contextPath}/admin/users" method="post" style="display: inline;">
                     <input type="hidden" name="_method" value="DELETE">
                     <input type="hidden" name="userId" id="deleteFormUserId">
                     <button type="submit" class="btn btn-danger">Delete</button>
@@ -91,7 +91,7 @@
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <form id="editUserForm" method="post" action="${pageContext.request.contextPath}/admin/edit">
+      <form id="editUserForm" method="post" action="${pageContext.request.contextPath}/admin/users">
         <div class="modal-header">
           <h5 class="modal-title" id="editModalLabel">Edit User</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">

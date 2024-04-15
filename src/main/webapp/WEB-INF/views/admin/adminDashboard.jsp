@@ -35,7 +35,7 @@
                 <a href="${pageContext.request.contextPath}/admin/dashboard?section=users" class="list-group-item list-group-item-action">Manage Users</a>
 				<a href="${pageContext.request.contextPath}/admin/dashboard?section=products" class="list-group-item list-group-item-action">Manage Products</a>
 				<a href="${pageContext.request.contextPath}/admin/dashboard?section=claims" class="list-group-item list-group-item-action">Manage Claims</a>
-				<a href="${pageContext.request.contextPath}/admin/dashboard?section=reports" class="list-group-item list-group-item-action">Generate Reports</a>
+				<a href="${pageContext.request.contextPath}/admin/dashboard?section=reports" class="list-group-item list-group-item-action">Report</a>
 
             </div>
         </div>
@@ -44,6 +44,15 @@
 	    	<c:choose>
 	        <c:when test="${section == 'users'}">
 	            <%@ include file="userManagement.jsp" %>
+	        </c:when>
+	        <c:when test="${section == 'products'}">
+	            <%@ include file="productManagement.jsp" %>
+	        </c:when>
+	        <c:when test="${section == 'claims'}">
+	            <%@ include file="claimManagement.jsp" %>
+	        </c:when>
+	        <c:when test="${section == 'reports'}">
+	            <%@ include file="reports.jsp" %>
 	        </c:when>
 	    	</c:choose>
 		</div>
