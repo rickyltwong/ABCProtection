@@ -37,23 +37,21 @@ public class UserDashboardServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-
 		if (session == null || session.getAttribute("user") == null) {
-			// Not logged in, redirect to the login page
 			response.sendRedirect("login");
 			return;
 		}
 
-		User currentUser = (User) session.getAttribute("user");
-		String username = currentUser.getUsername();
+		User user = (User) session.getAttribute("user");
+		List<Registration> registrations = registrationDAO.getAllRegistrationsUser(user.getUsername());
+		ClaimDAO claimDAO = new ClaimDAO();
 
-		// Fetch registrations for the logged-in user
-		List<Registration> productsList = registrationDAO.getAllRegistrationsUser(username);
-		List<Claim> claimsList = claimDAO.getAllClaimsUser(username);
+		for (Registration reg : registrations) {
+			List<Claim> claims = claimDAO.getClaimsByRegistrationId(reg.getRegistrationId());
+			reg.setClaims(claims);
+		}
 
-		request.setAttribute("productsList", productsList);
-		request.setAttribute("claimsList", claimsList);
-
+		request.setAttribute("productsList", registrations);
 		request.getRequestDispatcher("/WEB-INF/views/user/dashboard.jsp").forward(request, response);
 	}
 

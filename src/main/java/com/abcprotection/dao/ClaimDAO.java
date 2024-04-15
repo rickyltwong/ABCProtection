@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import com.abcprotection.model.Claim;
@@ -113,4 +114,50 @@ public class ClaimDAO {
 		}
 		return claims;
 	}
+
+	public List<Claim> getClaimsByRegistrationId(int registrationId) {
+		List<Claim> claims = new ArrayList<>();
+		String sql = "SELECT * FROM Claims WHERE registration_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, registrationId);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Claim claim = new Claim();
+				claim.setClaimId(rs.getInt("claim_id"));
+				claim.setRegistrationId(rs.getInt("registration_id"));
+				claim.setDateOfClaim(rs.getDate("date_of_claim"));
+				claim.setDescription(rs.getString("description"));
+				claim.setStatus(rs.getString("status"));
+				claims.add(claim);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return claims;
+	}
+
+	public List<Claim> getRecentClaimsByRegistrationId(int registrationId) {
+		List<Claim> claims = new ArrayList<>();
+		String sql = "SELECT * FROM Claims WHERE registration_id = ? AND date_of_claim >= ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, registrationId);
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.YEAR, -5);
+			pstmt.setDate(2, new java.sql.Date(cal.getTimeInMillis()));
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Claim claim = new Claim();
+				claim.setClaimId(rs.getInt("claim_id"));
+				claim.setRegistrationId(rs.getInt("registration_id"));
+				claim.setDateOfClaim(rs.getDate("date_of_claim"));
+				claim.setDescription(rs.getString("description"));
+				claim.setStatus(rs.getString("status"));
+				claims.add(claim);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return claims;
+	}
+
 }

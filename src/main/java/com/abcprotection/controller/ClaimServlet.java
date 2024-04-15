@@ -44,6 +44,13 @@ public class ClaimServlet extends HttpServlet {
 		int registrationId = Integer.parseInt(request.getParameter("registrationId"));
 		String description = request.getParameter("description");
 
+		List<Claim> existingClaims = claimDAO.getRecentClaimsByRegistrationId(registrationId);
+		if (existingClaims.size() >= 3) {
+			request.setAttribute("error", "A maximum of 3 claims are allowed within five years.");
+			request.getRequestDispatcher("/claimError.jsp").forward(request, response);
+			return;
+		}
+
 		Date dateOfClaim = new Date();
 
 		Claim claim = new Claim();
@@ -60,7 +67,6 @@ public class ClaimServlet extends HttpServlet {
 	}
 
 	@Override
-
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession(false);

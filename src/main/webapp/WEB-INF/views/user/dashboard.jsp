@@ -9,6 +9,11 @@
     <meta charset="UTF-8">
     <title>Dashboard</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .approved { background-color: #28a745; } /* green */
+        .rejected { background-color: #dc3545; } /* red */
+        .pending { background-color: #ffc107; }  /* yellow */
+    </style>
 </head>
 <body>
 
@@ -41,56 +46,47 @@
 </nav>
 
 <div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6">
-            <h2>Registered Products</h2>
-            <table class="table table-striped">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Registration ID</th>
-                        <th>Product Name</th>
-                        <th>Serial No</th>
-                        <th>Purchase Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% List<Registration> productsList = (List<Registration>) request.getAttribute("productsList");
-                       if (productsList != null) {
-                           for (Registration reg : productsList) {
-                               out.println("<tr><td>" + reg.getRegistrationId() + "</td><td>" + reg.getProductName() + "</td><td>" + reg.getSerialNo() + 
-                                   "</td><td>" + reg.getPurchaseDate() + "</td></tr>");
-                           }
-                       }
-                    %>
-                </tbody>
-            </table>
-        </div>
-        <div class="col-md-6">
-            <h2>Filed Claims</h2>
-            <table class="table table-striped">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Claim ID</th>
-                        <th>Registration ID</th>
-                        <th>Date of Claim</th>
-                        <th>Description</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% List<Claim> claimsList = (List<Claim>) request.getAttribute("claimsList");
-                       if (claimsList != null) {
+    <h2>Registered Products and Claims</h2>
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Product Name</th>
+                <th>Serial No</th>
+                <th>Purchase Date</th>
+                <th>Claims</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% List<Registration> productsList = (List<Registration>) request.getAttribute("productsList");
+               if (productsList != null) {
+                   for (Registration reg : productsList) {
+                       out.println("<tr><td>" + reg.getProductName() + "</td><td>" + reg.getSerialNo() + 
+                           "</td><td>" + reg.getPurchaseDate() + "</td>");
+                       out.println("<td>");
+                       out.println("<table class='table'>");
+                       out.println("<tr><th>Claim ID</th><th>Description</th><th>Status</th></tr>");
+                       List<Claim> claimsList = reg.getClaims();
+                       if (claimsList != null && !claimsList.isEmpty()) {
                            for (Claim claim : claimsList) {
-                               out.println("<tr><td>" + claim.getClaimId() + "</td><td>" + claim.getRegistrationId() + 
-                                   "</td><td>" + claim.getDateOfClaim() + "</td><td>" + claim.getDescription() + 
+                               String rowClass = "pending";
+                               if ("approved".equalsIgnoreCase(claim.getStatus())) {
+                                   rowClass = "approved";
+                               } else if ("rejected".equalsIgnoreCase(claim.getStatus())) {
+                                   rowClass = "rejected";
+                               }
+                               out.println("<tr class='" + rowClass + "'><td>" + claim.getClaimId() + "</td><td>" + claim.getDescription() +
                                    "</td><td>" + claim.getStatus() + "</td></tr>");
                            }
+                       } else {
+                           out.println("<tr><td colspan='3'>No claims filed</td></tr>");
                        }
-                    %>
-                </tbody>
-            </table>
-        </div>
-    </div>
+                       out.println("</table>");
+                       out.println("</td></tr>");
+                   }
+               }
+            %>
+        </tbody>
+    </table>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

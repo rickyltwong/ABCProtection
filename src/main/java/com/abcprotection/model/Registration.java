@@ -1,10 +1,11 @@
 package com.abcprotection.model;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Model class for Registrations. Represents a registration of a product by a
- * user.
+ * user. Includes claims related to the registration.
  */
 public class Registration {
 	private int registrationId;
@@ -12,6 +13,7 @@ public class Registration {
 	private String productName;
 	private String serialNo;
 	private Date purchaseDate;
+	private List<Claim> claims; // List to hold associated claims
 
 	public Registration() {
 	}
@@ -62,5 +64,13 @@ public class Registration {
 
 	public void setPurchaseDate(Date purchaseDate) {
 		this.purchaseDate = purchaseDate;
+	}
+
+	public List<Claim> getClaims() {
+		return claims;
+	}
+
+	public void setClaims(List<Claim> claims) {
+		this.claims = claims; // Set the claims associated with this registration
 	}
 }

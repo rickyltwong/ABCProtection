@@ -53,6 +53,20 @@ public class UserLoginServlet extends HttpServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 
+		// Basic input validation
+		if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+			request.setAttribute("NOTIFICATION", "Username and password cannot be empty.");
+			doGet(request, response);
+			return;
+		}
+
+		// Length validation
+		if (username.length() < 4 || password.length() < 4) {
+			request.setAttribute("NOTIFICATION", "Username and password must be at least 4 characters long.");
+			doGet(request, response);
+			return;
+		}
+
 		User user = userDAO.authenticateUser(username, password);
 		if (user != null) {
 			HttpSession session = request.getSession();
@@ -63,4 +77,5 @@ public class UserLoginServlet extends HttpServlet {
 			doGet(request, response);
 		}
 	}
+
 }
