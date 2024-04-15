@@ -91,4 +91,17 @@ public class ProductDAO {
 		}
 		return products;
 	}
+
+	public List<String> getAllProductNames() {
+		List<String> products = new ArrayList<>();
+		String sql = "SELECT product_name FROM Products";
+		try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+			while (rs.next()) {
+				products.add(rs.getString("product_name"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return products;
+	}
 }

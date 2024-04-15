@@ -24,12 +24,12 @@ public class ClaimDAO {
 	}
 
 	public boolean addClaim(Claim claim) {
-		String sql = "INSERT INTO Claims (registration_id, date_of_claim, description, status) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO Claims (registration_id, date_of_claim, description) VALUES (?, ?, ?)";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, claim.getRegistrationId());
-			pstmt.setDate(2, new java.sql.Date(claim.getDateOfClaim().getTime()));
+			java.sql.Date sqlDate = new java.sql.Date(claim.getDateOfClaim().getTime());
+			pstmt.setDate(2, sqlDate);
 			pstmt.setString(3, claim.getDescription());
-			pstmt.setString(4, claim.getStatus());
 			pstmt.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -86,6 +86,23 @@ public class ClaimDAO {
 		List<Claim> claims = new ArrayList<>();
 		String sql = "SELECT * FROM Claims";
 		try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+			while (rs.next()) {
+				Claim claim = new Claim(rs.getInt("claim_id"), rs.getInt("registration_id"),
+						rs.getDate("date_of_claim"), rs.getString("description"), rs.getString("status"));
+				claims.add(claim);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return claims;
+	}
+
+	public List<Claim> getAllClaimsUser(String username) {
+		List<Claim> claims = new ArrayList<>();
+		String sql = "SELECT * FROM Claims c JOIN Registrations r ON c.registration_id = r.registration_id WHERE r.username = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setString(1, username);
+			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				Claim claim = new Claim(rs.getInt("claim_id"), rs.getInt("registration_id"),
 						rs.getDate("date_of_claim"), rs.getString("description"), rs.getString("status"));

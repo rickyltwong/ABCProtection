@@ -49,7 +49,7 @@ public class UserDashboardServlet extends HttpServlet {
 
 		// Fetch registrations for the logged-in user
 		List<Registration> productsList = registrationDAO.getAllRegistrationsUser(username);
-		List<Claim> claimsList = claimDAO.getAllClaims();
+		List<Claim> claimsList = claimDAO.getAllClaimsUser(username);
 
 		request.setAttribute("productsList", productsList);
 		request.setAttribute("claimsList", claimsList);
